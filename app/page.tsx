@@ -113,7 +113,7 @@ export default function Home() {
     (selectedMeter ?? selectedRoom) && selectedDates.length === 2;
 
   const handleOpen = async () => {
-    function getRandomInt(max) {
+    function getRandomInt(max: number) {
       return Math.floor(Math.random() * max);
     }
 
