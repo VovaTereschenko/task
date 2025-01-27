@@ -1,0 +1,44 @@
+{
+  "meters": [
+    {
+      "id": "hq-main-m1",
+      "name": "Main Hall Primary Meter",
+      "buildingId": "hq",
+      "readings": [
+        { "timestamp": "2024-11-20", "consumption": 2121, "cost": 100 },
+        { "timestamp": "2024-11-21", "consumption": 2094, "cost": 110 },
+        { "timestamp": "2024-11-22", "consumption": 2178, "cost": 120 }
+      ]
+    },
+    {
+      "id": "hq-server1-m1",
+      "name": "Server Room Meter",
+      "buildingId": "hq",
+      "readings": [
+        { "timestamp": "2024-11-20", "consumption": 5121, "cost": 252 },
+        { "timestamp": "2024-11-21", "consumption": 5094, "cost": 242 },
+        { "timestamp": "2024-11-22", "consumption": 5178, "cost": 261 }
+      ]
+    },
+    {
+      "id": "dc-main-m1",
+      "name": "Ground Main Meter",
+      "buildingId": "dc",
+      "readings": [
+        { "timestamp": "2024-11-20", "consumption": 6121, "cost": 301 },
+        { "timestamp": "2024-11-21", "consumption": 6094, "cost": 293 },
+        { "timestamp": "2024-11-22", "consumption": 6178, "cost": 311 }
+      ]
+    },
+    {
+      "id": "ro-server1-m1",
+      "name": "Main Server Meter",
+      "buildingId": "ro",
+      "readings": [
+        { "timestamp": "2024-11-20", "consumption": 1121, "cost": 55 },
+        { "timestamp": "2024-11-21", "consumption": 1094, "cost": 51 },
+        { "timestamp": "2024-11-22", "consumption": 1178, "cost": 59 }
+      ]
+    }
+  ]
+}

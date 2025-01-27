@@ -1,0 +1,22 @@
+{
+  "buildings": [
+    {
+      "id": "hq",
+      "name": "Headquarters",
+      "rooms": ["hq-main", "hq-office", "hq-server"],
+      "meters": ["hq-main-m1", "hq-server1-m1"]
+    },
+    {
+      "id": "dc",
+      "name": "Primary Data Center",
+      "rooms": ["dc-main"],
+      "meters": ["dc-main-m1"]
+    },
+    {
+      "id": "ro",
+      "name": "Regional Office",
+      "rooms": ["ro-server1"],
+      "meters": ["ro-server1-m1"]
+    }
+  ]
+}
