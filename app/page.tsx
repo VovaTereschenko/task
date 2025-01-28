@@ -21,6 +21,8 @@ import {
   Room as RoomIcon,
   ElectricMeter as ElectricMeterIcon,
 } from "@mui/icons-material";
+import { useDateSelection } from "./hooks/useDateSelection";
+import { handleFakeRequest } from "./utils/handleFakeRequest";
 
 type SelectionValue = {
   id: string;
@@ -51,21 +53,25 @@ export default function Home() {
   const [tabValue, setTabValue] = useState(0);
   const [roomsInputValue, setRoomsInputValue] = useState("");
   const [meterInputValue, setMeterInputValue] = useState("");
-  const [selectedDates, setSelectedDates] = useState<
-    {
-      date: string;
-      index: number;
-      status: "from" | "to";
-    }[]
-  >([]);
 
-  const [open, setOpen] = useState(false);
+  const { selectedDates, setSelectedDates, handleDateSelect } =
+    useDateSelection();
+
+  const [modalIsOpen, setModalOpen] = useState(false);
   const [snackBarIsOpen, setSnackbarOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const handleRequest = () =>
+    handleFakeRequest({
+      onSuccess: () => setModalOpen(true),
+      onFail: () => setSnackbarOpen(true),
+      setLoading: () => setLoading(true),
+    });
+
   useEffect(() => {
     setLoading(false);
-  }, [snackBarIsOpen, open]);
+  }, [snackBarIsOpen, modalIsOpen]);
+
   useEffect(() => {
     const filteredMeters = meters.meters.filter(
       ({ buildingId }) => selectedBuilding?.id === buildingId
@@ -86,48 +92,12 @@ export default function Home() {
     setSelectedDates([]);
   }, [tabValue]);
 
-  const onDateSelect = (date: string, index: number) => {
-    if (!selectedDates.length)
-      setSelectedDates([{ date, index, status: "from" }]);
-    else if (selectedDates.length === 1) {
-      if (selectedDates[0].index > index) {
-        setSelectedDates([
-          { date, index, status: "from" },
-          { ...selectedDates[0], status: "to" },
-        ]);
-      } else if (selectedDates[0].index === index) {
-        setSelectedDates([]);
-      } else if (selectedDates[0].index < index) {
-        setSelectedDates([...selectedDates, { date, index, status: "to" }]);
-      }
-    } else if (selectedDates.length === 2) {
-      setSelectedDates([]);
-    }
-  };
-
   const currentMeter =
     availableMeters.find(({ id }) => selectedMeter?.id === id) ?? null;
   const currentRoom =
     availableRooms.find(({ id }) => selectedRoom?.id === id) ?? null;
   const buttonEnabled =
     (selectedMeter ?? selectedRoom) && selectedDates.length === 2;
-
-  const handleOpen = async () => {
-    function getRandomInt(max: number) {
-      return Math.floor(Math.random() * max);
-    }
-
-    setLoading(true);
-
-    const num = new Promise((res) => {
-      setTimeout(() => {
-        const randomNumber = getRandomInt(2);
-        res(randomNumber);
-      }, 1000);
-    });
-
-    num.then((res) => (res === 1 ? setOpen(true) : setSnackbarOpen(true)));
-  };
 
   return (
     <div className="w-100 flex flex-col items-center px-6 mt-8">
@@ -208,13 +178,13 @@ export default function Home() {
               dates={
                 currentMeter?.readings.map(({ timestamp }) => timestamp) ?? []
               }
-              onDateSelect={onDateSelect}
+              onDateSelect={handleDateSelect}
               selectedDates={selectedDates}
             />
 
             <Modal
-              open={open}
-              onClose={() => setOpen(false)}
+              open={modalIsOpen}
+              onClose={() => setModalOpen(false)}
               aria-labelledby="modal-modal-title"
               aria-describedby="modal-modal-description"
             >
@@ -275,13 +245,13 @@ export default function Home() {
               dates={
                 currentRoom?.readings.map(({ timestamp }) => timestamp) ?? []
               }
-              onDateSelect={onDateSelect}
+              onDateSelect={handleDateSelect}
               selectedDates={selectedDates}
             />
 
             <Modal
-              open={open}
-              onClose={() => setOpen(false)}
+              open={modalIsOpen}
+              onClose={() => setModalOpen(false)}
               aria-labelledby="modal-modal-title"
               aria-describedby="modal-modal-description"
             >
@@ -311,7 +281,7 @@ export default function Home() {
         )}
         <div className="mt-2">
           <Button
-            onClick={handleOpen}
+            onClick={handleRequest}
             disabled={!buttonEnabled}
             fullWidth
             variant="contained"
